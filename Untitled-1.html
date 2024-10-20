@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>Quick Start - Leaflet</title>
+		
+		<!-- Inclure Leaflet CSS -->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+		
+		<!-- Inclure Leaflet JS -->
+		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+	
+		<style>
+		html, body {
+			height: 100%;
+			margin: 0;
+		}
+		.leaflet-container {
+			height: 400px;
+			width: 600px;
+			max-width: 100%;
+			max-height: 100%;
+		}
+	</style>
+
+	
+</head>
+<body>
+
+
+
+<div id="map" style="width: 600px; height: 400px;"></div>
+<script src="stations_tram.js" type="text/javascript"></script>
+	}
+
+	map.addLayer(markers);
+<script>
+
+    const map = L.map('map').setView([34.02, -6.83], 13); // Centered on Rabat
+
+	const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	}).addTo(map);
+
+	const marker = L.marker([34.02, -6.83]).addTo(map)
+		.bindPopup('<b>Hello world!</b><br />I am a popup.').openPopup();
+
+	const circle = L.circle([34.02, -6.83], {
+		color: 'red',
+		fillColor: '#f03',
+		fillOpacity: 0.2,
+		radius: 6000
+	}).addTo(map).bindPopup('hello amal.');
+
+	const polygon = L.polygon([
+		[33.9816, -6.8639],
+		[33.9809, -6.8627],
+		[33.9805, -6.8591],
+        [33.9802, -6.8585],
+        [33.9798, -6.8589],
+        [33.9797, -6.8594],
+        [33.9749, -6.8642],
+        [33.9707, -6.8674],
+        [33.9724, -6.8699],
+        [33.9740, -6.8698],
+        [33.9746, -6.8706] 
+	]).addTo(map).bindPopup('Institut agronomique et vétérinaire hassanII à Rabat.');
+
+
+	const popup = L.popup()
+		.setLatLng([34.02, -6.83])
+		.setContent('wellcome to Rabat.')
+		.openOn(map);
+
+	function onMapClick(e) {
+		popup
+			.setLatLng(e.latlng)
+			.setContent(`You clicked the map at ${e.latlng.toString()}`)
+			.openOn(map);
+	}
+
+	map.on('click', onMapClick);
+
+	L.geoJSON(stations_tram, {
+        pointToLayer: function(feature, latlng) {
+            return L.circleMarker(latlng, {
+                radius: 5, // Taille du point
+                fillColor: '#ff7800',
+                color: '#000',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            });
+        },
+        onEachFeature: function (feature, layer) {
+            if (feature.properties && feature.properties.name) {
+                layer.bindPopup(feature.properties.name);
+            }
+        }
+    }).addTo(map);
+
+
+</script>
+
+
+
+</body>
+</html>
